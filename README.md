@@ -1,5 +1,7 @@
 # Punchdle 🥊
 
+**Play it:** https://rgaliant.github.io/Punchdle/
+
 A daily punching-bag game in the style of Wordle. You get **one punch per day**.
 
 Press and hold the button (or spacebar) to wind up, then let go to punch. Each day has a secret
