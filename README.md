@@ -30,7 +30,7 @@ python3 -m http.server 8000
 # open http://localhost:8000
 ```
 
-To deploy, enable GitHub Pages on the repo (Settings → Pages → deploy from branch, root folder).
+Pushes to `main` deploy to GitHub Pages automatically (`.github/workflows/pages.yml`). Pages must use **GitHub Actions** as its source (Settings → Pages).
 
 **Testing:** Add `?reset` to the URL to clear today's punch and play again.
 
