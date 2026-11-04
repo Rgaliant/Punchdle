@@ -1,0 +1,144 @@
+<!doctype html>
+<html lang="en">
+<head>
+  <meta charset="utf-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover" />
+  <title>Punchdle</title>
+  <meta name="description" content="One punch a day. Hold the button, let go at the perfect moment, and see how hard you hit." />
+  <meta name="theme-color" content="#14121a" />
+  <link rel="icon" href="data:image/svg+xml,<svg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 100 100'><text y='.9em' font-size='90'>🥊</text></svg>" />
+  <link rel="preconnect" href="https://fonts.googleapis.com" />
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+  <link href="https://fonts.googleapis.com/css2?family=Bungee&family=Orbitron:wght@700;900&family=Inter:wght@400;600;800&display=swap" rel="stylesheet" />
+  <link rel="stylesheet" href="style.css" />
+</head>
+<body>
+  <header class="topbar">
+    <button class="icon-btn" id="btn-help" aria-label="How to play" title="How to play">?</button>
+    <h1 class="logo">PUNCH<span>DLE</span></h1>
+    <div class="topbar-right">
+      <button class="icon-btn" id="btn-sound" aria-label="Toggle sound" title="Toggle sound">🔊</button>
+      <button class="icon-btn" id="btn-achievements" aria-label="Achievements" title="Achievements">🏆</button>
+      <button class="icon-btn" id="btn-stats" aria-label="Statistics" title="Statistics">📊</button>
+    </div>
+  </header>
+
+  <main class="game">
+    <p class="day-label" id="day-label">Punchdle #1</p>
+
+    <div class="machine">
+      <div class="display" aria-live="polite">
+        <div class="display-label">PUNCH POWER</div>
+        <div class="display-value" id="display-value">---</div>
+        <div class="display-tier" id="display-tier">&nbsp;</div>
+      </div>
+
+      <div class="arena">
+        <svg class="arena-svg" viewBox="0 0 320 300" aria-hidden="true">
+          <defs>
+            <linearGradient id="bagGrad" x1="0" x2="1">
+              <stop offset="0" stop-color="#7a1420" />
+              <stop offset="0.45" stop-color="#d22b3a" />
+              <stop offset="1" stop-color="#6a0f1a" />
+            </linearGradient>
+            <linearGradient id="gloveGrad" x1="0" y1="0" x2="0" y2="1">
+              <stop offset="0" stop-color="#ff5a5f" />
+              <stop offset="1" stop-color="#b3141f" />
+            </linearGradient>
+            <radialGradient id="powGrad">
+              <stop offset="0" stop-color="#fff6a8" />
+              <stop offset="1" stop-color="#ffb400" />
+            </radialGradient>
+          </defs>
+
+          <!-- ceiling mount -->
+          <rect x="170" y="0" width="60" height="8" rx="3" fill="#3a3646" />
+
+          <g id="bag" class="bag">
+            <line x1="200" y1="6" x2="200" y2="44" stroke="#9a96a8" stroke-width="4" stroke-dasharray="6 3" />
+            <path d="M178 44 h44 l8 14 h-60 z" fill="#2b2833" />
+            <rect x="160" y="54" width="80" height="220" rx="32" fill="url(#bagGrad)" />
+            <rect x="160" y="88" width="80" height="12" fill="#1d1a22" opacity="0.55" />
+            <rect x="160" y="228" width="80" height="12" fill="#1d1a22" opacity="0.55" />
+            <rect x="174" y="70" width="10" height="190" rx="5" fill="#fff" opacity="0.12" />
+            <text x="200" y="170" text-anchor="middle" class="bag-text">P</text>
+          </g>
+
+          <g id="pow" class="pow" opacity="0">
+            <polygon points="150,150 162,128 168,146 186,124 182,148 204,140 188,160 210,172 184,172 192,196 170,180 160,200 156,178 132,186 146,166 126,154" fill="url(#powGrad)" stroke="#ff7a00" stroke-width="2" />
+            <text x="168" y="166" text-anchor="middle" class="pow-text">POW</text>
+          </g>
+
+          <g id="glove" class="glove">
+            <rect x="12" y="150" width="34" height="40" rx="8" fill="#f2f2f2" />
+            <rect x="12" y="160" width="34" height="8" fill="#cfcfd6" />
+            <path d="M40 140 q10 -26 50 -22 q34 4 34 40 q0 34 -34 38 q-40 4 -50 -20 z" fill="url(#gloveGrad)" />
+            <path d="M58 130 q-6 18 10 24 q14 4 20 -8" fill="none" stroke="#7d0c14" stroke-width="3" stroke-linecap="round" />
+            <ellipse cx="96" cy="140" rx="12" ry="7" fill="#fff" opacity="0.25" />
+          </g>
+        </svg>
+      </div>
+    </div>
+
+    <section class="pre-play" id="pre-play">
+      <p class="hint" id="hint"></p>
+      <button class="hold-btn" id="hold-btn" type="button">
+        <span class="hold-btn-main" id="hold-btn-text">HOLD TO WIND UP</span>
+        <span class="hold-btn-sub">release to punch · spacebar works too</span>
+      </button>
+      <p class="fine-print">One punch per day. Make it count.</p>
+    </section>
+
+    <section class="result hidden" id="result">
+      <div class="result-grid">
+        <div><span class="stat-num" id="res-held">0.00s</span><span class="stat-label">You held</span></div>
+        <div><span class="stat-num" id="res-target">0.00s</span><span class="stat-label">Target</span></div>
+        <div><span class="stat-num" id="res-off">0.00s</span><span class="stat-label">Off by</span></div>
+      </div>
+      <button class="share-btn" id="share-btn" type="button">SHARE 🥊</button>
+      <p class="next">Next bag in <span id="countdown">--:--:--</span></p>
+    </section>
+  </main>
+
+  <!-- Modals -->
+  <div class="modal hidden" id="modal-help" role="dialog" aria-modal="true" aria-labelledby="help-title">
+    <div class="modal-card">
+      <button class="modal-close" data-close aria-label="Close">×</button>
+      <h2 id="help-title">How to play</h2>
+      <p>Every day there's a secret <strong>sweet spot</strong>: a hold time somewhere between 1.5 and 6.5 seconds. It's the same for everyone.</p>
+      <ol>
+        <li>Press and <strong>hold</strong> the button (or spacebar) to wind up.</li>
+        <li><strong>Let go</strong> to throw the punch.</li>
+        <li>The closer your release is to the sweet spot, the more <strong>punch points</strong> you get, up to <strong>999</strong>.</li>
+      </ol>
+      <p>You get a rough hint, but no timer. Go by feel. <strong>One punch per day.</strong> Refreshing mid-hold counts as a whiff.</p>
+      <h3>Ratings</h3>
+      <ul class="tier-list" id="tier-list"></ul>
+    </div>
+  </div>
+
+  <div class="modal hidden" id="modal-stats" role="dialog" aria-modal="true" aria-labelledby="stats-title">
+    <div class="modal-card">
+      <button class="modal-close" data-close aria-label="Close">×</button>
+      <h2 id="stats-title">Statistics</h2>
+      <div class="stats-row" id="stats-row"></div>
+      <h3>Punch distribution</h3>
+      <div class="dist" id="dist"></div>
+      <h3>Last 7 days</h3>
+      <div class="recent" id="recent"></div>
+    </div>
+  </div>
+
+  <div class="modal hidden" id="modal-achievements" role="dialog" aria-modal="true" aria-labelledby="ach-title">
+    <div class="modal-card wide">
+      <button class="modal-close" data-close aria-label="Close">×</button>
+      <h2 id="ach-title">Achievements <span class="ach-count" id="ach-count"></span></h2>
+      <div class="ach-grid" id="ach-grid"></div>
+    </div>
+  </div>
+
+  <div class="toasts" id="toasts" aria-live="polite"></div>
+
+  <script src="app.js"></script>
+</body>
+</html>
