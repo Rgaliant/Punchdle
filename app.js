@@ -4,7 +4,7 @@
   // ---------------------------------------------------------------------------
   // Config
   // ---------------------------------------------------------------------------
-  const EPOCH = Date.UTC(2026, 10, 4); // Punchdle #1 = 2026-11-04
+  const EPOCH = Date.UTC(2026, 10, 3); // Punchdle #1 = 2026-11-03
   const STORAGE_KEY = 'punchdle:v1';
   const MIN_TARGET_MS = 1500;
   const MAX_TARGET_MS = 6500;
@@ -523,11 +523,12 @@
     const r = state.history[todayKey];
     if (!r) return '';
     const tier = tierFor(r.score);
-    const filled = Math.round(r.score / 100);
+    // Any hit lights at least one segment; only a perfect fills all ten.
+    const filled = r.score === 0 ? 0 : Math.min(r.score === 999 ? 10 : 9, Math.max(1, Math.round(r.score / 100)));
     const bar = tier.emoji.repeat(filled) + '⬜'.repeat(10 - filled);
-    const off = r.forfeit ? 'forfeit' : `${(Math.abs(r.held - r.target) / 1000).toFixed(2)}s off`;
     const s = computeStats();
-    return `Punchdle #${puzzle.number} 🥊\n${r.score}/999 · ${tier.name}\n${bar}\n⏱️ ${off} · 🔥 ${s.streak}\n${location.origin}${location.pathname}`;
+    // No timing info here, so sharing doesn't spoil today's sweet spot.
+    return `Punchdle #${puzzle.number} 🥊\n${r.score}/999 · ${tier.name}\n${bar}\n🔥 ${s.streak} day streak\n${location.origin}${location.pathname}`;
   }
 
   async function share() {
